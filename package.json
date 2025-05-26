@@ -8,7 +8,7 @@
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
-        "lint": "eslint .",
+        "lint": "eslint . --ext .js,.ts,.vue",
         "lint:fix": "eslint . --fix",
         "prepare": "husky"
 
@@ -29,6 +29,6 @@
         "lint-staged": "^16.0.0"
     },
     "lint-staged": {
-        "*": "pnpm lint"
+        "*.{js,ts,vue}": "eslint --fix"
     }
 }
