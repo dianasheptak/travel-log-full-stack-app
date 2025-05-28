@@ -2,8 +2,8 @@
 </script>
 
 <template>
-    <div>
-        <NuxtRouteAnnouncer />
-        <NuxtWelcome />
-    </div>
+    <button class="btn btn-primary">
+        Button
+    </button>
+    <Icon name="tabler:map" style="color: black" />
 </template>
