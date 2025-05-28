@@ -15,6 +15,13 @@
       "when": 1748438810406,
       "tag": "0001_lovely_captain_cross",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1748445063624,
+      "tag": "0002_late_toad_men",
+      "breakpoints": true
     }
   ]
 }
