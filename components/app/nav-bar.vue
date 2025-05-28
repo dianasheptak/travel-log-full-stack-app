@@ -1,5 +1,5 @@
 <script setup>
-
+import ThemeToggle from "~/components/app/theme-toggle.vue";
 </script>
 
 <template>
@@ -11,6 +11,7 @@
                 </NuxtLink>
             </div>
             <div class="navbar-end">
+                <ThemeToggle class="mx-4" />
                 <NuxtLink class="btn">
                     Start Logging with Github
                     <Icon name="tabler:brand-github" size="24" />
