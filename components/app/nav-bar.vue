@@ -1,5 +1,6 @@
 <script setup>
 import ThemeToggle from "~/components/app/theme-toggle.vue";
+import AuthButton from "~/components/auth-button.vue";
 </script>
 
 <template>
@@ -12,10 +13,7 @@ import ThemeToggle from "~/components/app/theme-toggle.vue";
             </div>
             <div class="navbar-end">
                 <ThemeToggle class="mx-4" />
-                <NuxtLink class="btn">
-                    Start Logging with Github
-                    <Icon name="tabler:brand-github" size="24" />
-                </NuxtLink>
+                <AuthButton />
             </div>
         </div>
     </div>
