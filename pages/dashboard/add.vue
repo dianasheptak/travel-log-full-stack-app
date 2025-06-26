@@ -4,7 +4,7 @@ import type { FetchError } from "ofetch";
 import AppFormField from "~/components/app/form-field.vue";
 import { InsertLocation } from "~/lib/db/schema";
 
-const { handleSubmit, errors, setErrors } = useForm({
+const { handleSubmit, errors, meta, setErrors } = useForm({
     validationSchema: toTypedSchema(InsertLocation),
 });
 
@@ -12,14 +12,15 @@ const router = useRouter();
 const loading = ref(false);
 const submitError = ref("");
 
-const onSubmit = handleSubmit(async () => {
+const onSubmit = handleSubmit(async (values) => {
     try {
         submitError.value = "";
         loading.value = true;
-        // const inserted = await $fetch("/api/locations", {
-        //     method: "post",
-        //     body: values,
-        // });
+        const inserted = await $fetch("/api/locations", {
+            method: "post",
+            body: values,
+        });
+        console.log(inserted);
     }
     catch (e) {
         const error = e as FetchError;
@@ -33,17 +34,20 @@ const onSubmit = handleSubmit(async () => {
     }
 });
 
-// onBeforeRouteLeave(() => {
-//     if (meta.value.dirty) {
-//         const confirm = window.confirm("Are you sure you want to leave? All unsaved changes will be lost.");
-//     }
-//
-//     if (!confirm) {
-//         return false;
-//     }
-//
-//     return true;
-// });
+onBeforeRouteLeave(() => {
+    let confirmed = true;
+
+    if (meta.value.dirty) {
+        // eslint-disable-next-line no-alert
+        confirmed = window.confirm("Are you sure you want to leave? All unsaved changes will be lost.");
+    }
+
+    if (!confirmed) {
+        return false;
+    }
+
+    return true;
+});
 </script>
 
 <template>
