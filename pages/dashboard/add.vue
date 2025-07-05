@@ -12,6 +12,18 @@ const router = useRouter();
 const loading = ref(false);
 const submitError = ref("");
 
+// const onSubmit = handleSubmit(async (values) => {
+//     try {
+//       const inserted = await $fetch("/api/locations", {
+//         method: "post",
+//         body: values,
+//       });
+//       console.log(inserted)
+//     } catch (e) {
+//       console.log(e)
+//     }
+// });
+
 const onSubmit = handleSubmit(async (values) => {
     try {
         submitError.value = "";
@@ -20,7 +32,7 @@ const onSubmit = handleSubmit(async (values) => {
             method: "post",
             body: values,
         });
-        console.log(inserted);
+        console.log(456, inserted);
     }
     catch (e) {
         const error = e as FetchError;

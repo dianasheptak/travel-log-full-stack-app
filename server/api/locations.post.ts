@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
 
     const [created] = await db.insert(location).values({
         ...result.data,
-        slug: result.data.name.replaceAll(" ", "-".toLowerCase()),
+        slug: result.data.name.replaceAll(" ", "-").toLowerCase(),
         userId: event.context.user.id,
     }).returning();
 
