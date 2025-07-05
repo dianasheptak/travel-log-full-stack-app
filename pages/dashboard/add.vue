@@ -8,31 +8,25 @@ const { handleSubmit, errors, meta, setErrors } = useForm({
     validationSchema: toTypedSchema(InsertLocation),
 });
 
+const { $csrfFetch } = useNuxtApp();
 const router = useRouter();
 const loading = ref(false);
 const submitError = ref("");
-
-// const onSubmit = handleSubmit(async (values) => {
-//     try {
-//       const inserted = await $fetch("/api/locations", {
-//         method: "post",
-//         body: values,
-//       });
-//       console.log(inserted)
-//     } catch (e) {
-//       console.log(e)
-//     }
-// });
+const submitted = ref(false);
 
 const onSubmit = handleSubmit(async (values) => {
     try {
         submitError.value = "";
         loading.value = true;
-        const inserted = await $fetch("/api/locations", {
+        const inserted = await $csrfFetch("/api/locations", {
             method: "post",
             body: values,
         });
-        console.log(456, inserted);
+
+        console.log(inserted);
+
+        submitted.value = true;
+        navigateTo("/dashboard");
     }
     catch (e) {
         const error = e as FetchError;
@@ -49,7 +43,7 @@ const onSubmit = handleSubmit(async (values) => {
 onBeforeRouteLeave(() => {
     let confirmed = true;
 
-    if (meta.value.dirty) {
+    if (!submitted.value && meta.value.dirty) {
         // eslint-disable-next-line no-alert
         confirmed = window.confirm("Are you sure you want to leave? All unsaved changes will be lost.");
     }

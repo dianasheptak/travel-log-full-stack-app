@@ -20,6 +20,7 @@ export default defineNuxtConfig({
         "@nuxtjs/color-mode",
         "@pinia/nuxt",
         "@vee-validate/nuxt",
+        "nuxt-csurf",
     ],
     eslint: {
         config: {
