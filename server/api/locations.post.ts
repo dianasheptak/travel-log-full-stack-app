@@ -41,13 +41,12 @@ export default defineEventHandler(async (event) => {
         }));
     }
 
-    let slug = slugify(result.data.name);
     const existingLocation = await db.query.location.findFirst({
         where:
-        and(
-            eq(location.name, result.data.name),
-            eq(location.userId, event.context.user.id),
-        ),
+            and(
+                eq(location.name, result.data.name),
+                eq(location.userId, event.context.user.id),
+            ),
     });
 
     if (existingLocation) {
@@ -56,6 +55,11 @@ export default defineEventHandler(async (event) => {
             statusMessage: "A location with that name already exists!",
         }));
     }
+
+    let slug = slugify(result.data.name);
+    let existing = !!(await db.query.location.findFirst({
+        where: eq(location.slug, slug),
+    }));
 
     while (existing) {
         const id = nanoid();
