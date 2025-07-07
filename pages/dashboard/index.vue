@@ -9,12 +9,16 @@ const sidebarStore = useSidebarStore();
 
 watchEffect(() => {
     if (data.value) {
+        sidebarStore.loading = false;
         sidebarStore.sidebarItems = data.value.map(loc => ({
             location: `location-${loc.id}`,
             title: loc.name,
             icon: "tabler:map-pin-filled",
             href: "#",
         }));
+    }
+    else {
+        sidebarStore.loading = true;
     }
 });
 </script>
