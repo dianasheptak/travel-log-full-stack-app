@@ -10,7 +10,7 @@ function toggleSidebar() {
 }
 
 onMounted(() => {
-    isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === true;
+    isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
 });
 
 const sidebarStore = useSidebarStore();
@@ -50,15 +50,18 @@ const sidebarStore = useSidebarStore();
                 />
 
                 <div class="divider" />
+                <div v-if="sidebarStore.loading" class="skeleton h-4 w-full" />
 
-                <SidebarButton
-                    v-for="item in sidebarStore.sidebarItems"
-                    :key="item.id"
-                    :show-label="isSidebarOpen"
-                    :title="item.title"
-                    :icon="item.icon"
-                    :href="item.href"
-                />
+                <div v-else class="flex flex-col">
+                    <SidebarButton
+                        v-for="item in sidebarStore.sidebarItems"
+                        :key="item.id"
+                        :show-label="isSidebarOpen"
+                        :title="item.title"
+                        :icon="item.icon"
+                        :href="item.href"
+                    />
+                </div>
 
                 <SidebarButton
                     href="/sign-out"
