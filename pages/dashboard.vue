@@ -10,7 +10,7 @@ function toggleSidebar() {
 }
 
 onMounted(() => {
-    isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "trueg";
+    isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
 });
 
 const sidebarStore = useSidebarStore();
