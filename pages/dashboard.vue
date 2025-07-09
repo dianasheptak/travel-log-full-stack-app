@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import SidebarButton from "~/components/sidebar-button.vue";
+import { useLocationsStore } from "~/stores/locations";
 import { useSidebarStore } from "~/stores/sidebar";
 
 const isSidebarOpen = ref(true);
+const sidebarStore = useSidebarStore();
+const locationsStore = useLocationsStore();
+
+const route = useRoute();
 
 function toggleSidebar() {
     isSidebarOpen.value = !isSidebarOpen.value;
@@ -11,9 +16,11 @@ function toggleSidebar() {
 
 onMounted(() => {
     isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
-});
 
-const sidebarStore = useSidebarStore();
+    if (route.path !== "/dashboard") {
+        locationsStore.refresh();
+    }
+});
 </script>
 
 <template>
@@ -49,10 +56,12 @@ const sidebarStore = useSidebarStore();
                     :show-label="isSidebarOpen"
                 />
 
-                <div class="divider" />
-                <div v-if="sidebarStore.loading" class="skeleton h-4 w-full" />
+                <div v-if="sidebarStore.loading || sidebarStore.sidebarItems.length" class="divider" />
+                <div v-if="sidebarStore.loading" class="px-4">
+                    <div class="skeleton h-4 w-full" />
+                </div>
 
-                <div v-else-if="sidebarStore.sidebarItems.length" class="flex flex-col">
+                <div v-if="sidebarStore.sidebarItems.length" class="flex flex-col">
                     <SidebarButton
                         v-for="item in sidebarStore.sidebarItems"
                         :key="item.id"
