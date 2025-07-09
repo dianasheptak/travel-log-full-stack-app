@@ -6,7 +6,6 @@ import { useSidebarStore } from "~/stores/sidebar";
 const isSidebarOpen = ref(true);
 const sidebarStore = useSidebarStore();
 const locationsStore = useLocationsStore();
-
 const route = useRoute();
 
 function toggleSidebar() {
