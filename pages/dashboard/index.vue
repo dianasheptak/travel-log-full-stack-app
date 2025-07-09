@@ -17,9 +17,7 @@ watchEffect(() => {
             href: "#",
         }));
     }
-    else {
-        sidebarStore.loading = true;
-    }
+    sidebarStore.loading = status.value === "pending";
 });
 </script>
 

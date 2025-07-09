@@ -52,7 +52,7 @@ const sidebarStore = useSidebarStore();
                 <div class="divider" />
                 <div v-if="sidebarStore.loading" class="skeleton h-4 w-full" />
 
-                <div v-else class="flex flex-col">
+                <div v-else-if="sidebarStore.sidebarItems.length" class="flex flex-col">
                     <SidebarButton
                         v-for="item in sidebarStore.sidebarItems"
                         :key="item.id"
