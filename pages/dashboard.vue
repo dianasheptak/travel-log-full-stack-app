@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppMap from "~/components/app/map.client.vue";
 import SidebarButton from "~/components/sidebar-button.vue";
 import { useLocationsStore } from "~/stores/locations";
 import { useSidebarStore } from "~/stores/sidebar";
@@ -80,8 +81,10 @@ onMounted(() => {
                 />
             </div>
         </div>
+
         <div class="flex-1">
-            <NuxtPage />
+            <NuxtPage class="h-1/2" />
+            <AppMap class="h-1/2" />
         </div>
     </div>
 </template>
