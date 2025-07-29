@@ -82,9 +82,9 @@ onMounted(() => {
             </div>
         </div>
 
-        <div class="flex-1">
-            <NuxtPage class="h-1/2" />
-            <AppMap class="h-1/2" />
+        <div class="flex-1 flex flex-col">
+            <NuxtPage />
+            <AppMap class="flex-1" />
         </div>
     </div>
 </template>

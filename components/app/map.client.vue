@@ -1,13 +1,16 @@
 <script lang="ts" setup>
-const style = "https://demotiles.maplibre.org/style.json";
-const center = [-1.559482, 47.21322];
-const zoom = 8;
+import { CENTER_ODESA } from "~/lib/constants";
+
+const colorMode = useColorMode();
+
+const style = computed(() => colorMode.value === "dark" ? "/styles/dark.json" : "https://tiles.openfreemap.org/styles/liberty");
+const zoom = 11;
 </script>
 
 <template>
     <MglMap
         :map-style="style"
-        :center="center"
+        :center="CENTER_ODESA"
         :zoom="zoom"
     >
         <MglNavigationControl />
