@@ -36,4 +36,9 @@ export default defineNuxtConfig({
     colorMode: {
         dataValue: "theme",
     },
+    routeRules: {
+        "/dashboard": {
+            ssr: false,
+        },
+    },
 });
