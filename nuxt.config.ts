@@ -16,11 +16,6 @@ export default defineNuxtConfig({
             ],
         },
     },
-    routeRules: {
-        "/dashboard": {
-            ssr: false,
-        },
-    },
     css: ["~/assets/css/main.css"],
     modules: [
         "@nuxt/image",
@@ -40,5 +35,10 @@ export default defineNuxtConfig({
     },
     colorMode: {
         dataValue: "theme",
+    },
+    routeRules: {
+        "/dashboard": {
+            ssr: false,
+        },
     },
 });
