@@ -30,6 +30,14 @@ const zoom = 11;
                     />
                 </div>
             </template>
+            <MglPopup>
+                <h2 class="text-primary text-sm">
+                    {{ point.label }}
+                </h2>
+                <p>
+                    {{ point.description }}
+                </p>
+            </MglPopup>
         </MglMarker>
     </MglMap>
 </template>
