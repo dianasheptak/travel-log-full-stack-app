@@ -34,7 +34,7 @@ const zoom = 11;
                 <h2 class="text-primary text-sm">
                     {{ point.label }}
                 </h2>
-                <p>
+                <p v-if="point.description">
                     {{ point.description }}
                 </p>
             </MglPopup>

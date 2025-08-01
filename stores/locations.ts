@@ -21,6 +21,7 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
             mapStore.mapPoints = data.value.map(loc => ({
                 id: loc.id,
                 label: loc.name,
+                description: loc.description,
                 lat: loc.lat,
                 long: loc.long,
             }));
