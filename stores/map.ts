@@ -9,13 +9,20 @@ export const useMapStore = defineStore("useMapStore", () => {
     const selectedPoint = ref<MapPoint | null>(null);
 
     const map = useMap();
+    let bounds: LngLatBounds | null = null;
+    const shouldFlyTo = ref(true);
+
+    function selectPointWithoutFlyTo(point: MapPoint | null) {
+        shouldFlyTo.value = false;
+        selectedPoint.value = point;
+    }
 
     effect(() => {
         const firstPoint = mapPoints.value[0];
         if (!firstPoint) {
             return;
         }
-        const bounds = mapPoints.value.reduce((bounds, point) => {
+        bounds = mapPoints.value.reduce((bounds, point) => {
             return bounds.extend([point.long, point.lat]);
         }, new LngLatBounds(
             [firstPoint.long, firstPoint.lat],
@@ -27,8 +34,27 @@ export const useMapStore = defineStore("useMapStore", () => {
         });
     });
 
+    effect(() => {
+        if (selectedPoint.value) {
+            if (shouldFlyTo.value) {
+                map.map?.flyTo({
+                    center: [selectedPoint.value.long, selectedPoint.value.lat],
+                    zoom: 5,
+                    speed: 0.7,
+                });
+            }
+            shouldFlyTo.value = true;
+        }
+        else if (bounds) {
+            map.map?.fitBounds(bounds, {
+                padding: 50,
+            });
+        }
+    });
+
     return {
         mapPoints,
         selectedPoint,
+        selectPointWithoutFlyTo,
     };
 });

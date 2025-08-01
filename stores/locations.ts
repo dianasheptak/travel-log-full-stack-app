@@ -12,9 +12,9 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
     effect(() => {
         if (data.value) {
             sidebarStore.loading = false;
-            sidebarStore.sidebarItems = data.value.map(loc => ({
-                id: `location-${loc.id}`,
-                title: loc.name,
+            sidebarStore.sidebarItems = data.value.map(location => ({
+                id: `location-${location.id}`,
+                title: location.name,
                 icon: "tabler:map-pin-filled",
                 href: "#",
                 location,

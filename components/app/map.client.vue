@@ -22,11 +22,17 @@ const zoom = 11;
             :coordinates="[point.long, point.lat]"
         >
             <template #marker>
-                <div class="tooltip tooltip-top" :data-tip="point.name">
+                <div
+                    class="tooltip tooltip-top hover:cursor-pointer"
+                    :data-tip="point.name"
+                    :class="{ 'tooltip-open': mapStore.selectedPoint === point }"
+                    @mouseenter="mapStore.selectPointWithoutFlyTo(point)"
+                    @mouseleave="mapStore.selectPointWithoutFlyTo(null)"
+                >
                     <Icon
                         name="tabler:map-pin-filled"
                         size="30"
-                        class="text-primary"
+                        :class="mapStore.selectedPoint === point ? 'text-accent' : 'text-secondary'"
                     />
                 </div>
             </template>
