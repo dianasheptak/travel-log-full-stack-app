@@ -2,11 +2,13 @@
 import AppMap from "~/components/app/map.client.vue";
 import SidebarButton from "~/components/sidebar-button.vue";
 import { useLocationsStore } from "~/stores/locations";
+import { useMapStore } from "~/stores/map";
 import { useSidebarStore } from "~/stores/sidebar";
 
 const isSidebarOpen = ref(true);
 const sidebarStore = useSidebarStore();
 const locationsStore = useLocationsStore();
+const mapStore = useMapStore();
 
 const route = useRoute();
 
@@ -70,6 +72,9 @@ onMounted(() => {
                         :title="item.title"
                         :icon="item.icon"
                         :href="item.href"
+                        :icon-color="mapStore.selectedPoint === item.location ? 'text-primary' : undefined"
+                        @mouseenter="mapStore.selectedPoint = item.location ?? null"
+                        @mouseleave="mapStore.selectedPoint = null"
                     />
                 </div>
 

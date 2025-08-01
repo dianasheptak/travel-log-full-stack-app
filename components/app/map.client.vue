@@ -22,7 +22,7 @@ const zoom = 11;
             :coordinates="[point.long, point.lat]"
         >
             <template #marker>
-                <div class="tooltip tooltip-top" :data-tip="point.label">
+                <div class="tooltip tooltip-top" :data-tip="point.name">
                     <Icon
                         name="tabler:map-pin-filled"
                         size="30"
@@ -32,7 +32,7 @@ const zoom = 11;
             </template>
             <MglPopup>
                 <h2 class="text-primary text-sm">
-                    {{ point.label }}
+                    {{ point.name }}
                 </h2>
                 <p v-if="point.description">
                     {{ point.description }}

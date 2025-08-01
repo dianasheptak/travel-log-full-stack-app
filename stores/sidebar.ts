@@ -1,8 +1,11 @@
+import type { MapPoint } from "~/lib/types";
+
 export type SidebarItem = {
     id: number;
     title: string;
     icon: string;
     href: string;
+    location?: MapPoint | null;
 };
 
 export const useSidebarStore = defineStore("useSidebarStore", () => {

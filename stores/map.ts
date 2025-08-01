@@ -6,6 +6,8 @@ import type { MapPoint } from "~/lib/types";
 export const useMapStore = defineStore("useMapStore", () => {
     const mapPoints = ref<MapPoint[]>([]);
 
+    const selectedPoint = ref<MapPoint | null>(null);
+
     const map = useMap();
 
     effect(() => {
@@ -27,5 +29,6 @@ export const useMapStore = defineStore("useMapStore", () => {
 
     return {
         mapPoints,
+        selectedPoint,
     };
 });

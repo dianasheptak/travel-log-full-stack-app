@@ -1,10 +1,12 @@
-<script setup>
-const props = defineProps({
-    icon: String,
-    title: String,
-    href: String,
-    showLabel: Boolean,
-});
+<script lang="ts" setup>
+const props = defineProps<{
+    icon: string;
+    title: string;
+    href: string;
+    showLabel: boolean;
+    iconColor?: "text-accent" | "text-primary" | "text-secondary";
+
+}>();
 
 const route = useRoute();
 </script>
@@ -20,7 +22,11 @@ const route = useRoute();
             :class="{ 'bg-base-100': route.path === props.href, 'justify-center': !props.showLabel }"
             class="btn justify-start gap-3 cursor-pointer"
         >
-            <Icon :name="props.icon" size="24" />
+            <Icon
+                :name="props.icon"
+                size="24"
+                :class="iconColor"
+            />
             <Transition name="grow">
                 <span v-if="showLabel" class="truncate">{{ props.title }}</span>
             </Transition>
