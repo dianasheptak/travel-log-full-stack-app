@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { LngLat } from "maplibre-gl";
+
 import { CENTER_ODESA } from "~/lib/constants";
 import { useMapStore } from "~/stores/map";
 
@@ -7,6 +9,13 @@ const mapStore = useMapStore();
 const colorMode = useColorMode();
 const style = computed(() => colorMode.value === "dark" ? "/styles/dark.json" : "https://tiles.openfreemap.org/styles/liberty");
 const zoom = 11;
+
+function updateAddedPoint(location: LngLat) {
+    if (mapStore.addedPoint) {
+        mapStore.addedPoint.long = location.lng;
+        mapStore.addedPoint.lat = location.lat;
+    }
+}
 </script>
 
 <template>
@@ -20,6 +29,7 @@ const zoom = 11;
             v-if="mapStore.addedPoint"
             :coordinates="CENTER_ODESA"
             draggable
+            @update:coordinates="updateAddedPoint"
         >
             <template #marker>
                 <div

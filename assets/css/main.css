@@ -6,7 +6,6 @@
         dark --prefersdark;
 }
 
-
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 .maplibregl-popup-close-button {

@@ -6,7 +6,7 @@ import { CENTER_ODESA } from "~/lib/constants";
 import { InsertLocation } from "~/lib/db/schema";
 import { useMapStore } from "~/stores/map";
 
-const { handleSubmit, errors, meta, setErrors } = useForm({
+const { handleSubmit, errors, meta, setErrors, setFieldValue, controlledValues } = useForm({
     validationSchema: toTypedSchema(InsertLocation),
 });
 
@@ -44,6 +44,13 @@ const onSubmit = handleSubmit(async (values) => {
     }
 });
 
+effect(() => {
+    if (mapStore.addedPoint) {
+        setFieldValue("long", mapStore.addedPoint.long);
+        setFieldValue("lat", mapStore.addedPoint.lat);
+    }
+});
+
 onBeforeRouteLeave(() => {
     let confirmed = true;
 
@@ -68,6 +75,13 @@ onMounted(() => {
         id: 1,
     };
 });
+
+function formatNumber(value?: number) {
+    if (!value) {
+        return 0;
+    }
+    return value.toFixed(4);
+}
 </script>
 
 <template>
@@ -114,49 +128,17 @@ onMounted(() => {
                 :error="errors.description"
             />
 
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Latitude
-                </legend>
-                <Field
-                    :disabled="loading"
-                    name="lat"
-                    type="number"
-                    class="input w-full"
-                    :class="{ 'input-error': errors.lat }"
-                />
-                <p v-if="errors.lat" class="fieldset-label text-error">
-                    {{ errors.lat }}
-                </p>
-            </fieldset>
+            <p>
+                Drag the <Icon
+                    name="tabler:map-pin-filled"
+                    size="24"
+                    class="text-warning"
+                /> marker to your desired location.
+            </p>
 
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Longitude
-                </legend>
-                <Field
-                    :disabled="loading"
-                    name="long"
-                    type="number"
-                    class="input w-full"
-                    :class="{ 'input-error': errors.long }"
-                />
-                <p v-if="errors.long" class="fieldset-label text-error">
-                    {{ errors.long }}
-                </p>
-            </fieldset>
-
-            <!--            <AppFormField -->
-            <!--                name="lat" -->
-            <!--                label="Latitude" -->
-            <!--                :error="errors.lat" -->
-            <!--            /> -->
-
-            <!--            <AppFormField -->
-            <!--                name="long" -->
-            <!--                label="Longitude" -->
-            <!--                :error="errors.long" -->
-            <!--            /> -->
+            <p class="text-xs text-gray-400">
+                Current location: {{ formatNumber(controlledValues.lat) }}, {{ formatNumber(controlledValues.long) }}
+            </p>
 
             <div class="flex justify-end gap-2">
                 <button
