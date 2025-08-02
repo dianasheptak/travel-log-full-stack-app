@@ -7,7 +7,7 @@ export const useMapStore = defineStore("useMapStore", () => {
     const mapPoints = ref<MapPoint[]>([]);
 
     const selectedPoint = ref<MapPoint | null>(null);
-
+    const addedPoint = ref<MapPoint | null>(null);
     const map = useMap();
     let bounds: LngLatBounds | null = null;
     const shouldFlyTo = ref(true);
@@ -35,6 +35,9 @@ export const useMapStore = defineStore("useMapStore", () => {
     });
 
     effect(() => {
+        if (addedPoint.value) {
+            return;
+        }
         if (selectedPoint.value) {
             if (shouldFlyTo.value) {
                 map.map?.flyTo({
@@ -55,6 +58,7 @@ export const useMapStore = defineStore("useMapStore", () => {
     return {
         mapPoints,
         selectedPoint,
+        addedPoint,
         selectPointWithoutFlyTo,
     };
 });

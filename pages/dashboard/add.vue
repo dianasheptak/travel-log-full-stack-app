@@ -2,7 +2,9 @@
 import type { FetchError } from "ofetch";
 
 import AppFormField from "~/components/app/form-field.vue";
+import { CENTER_ODESA } from "~/lib/constants";
 import { InsertLocation } from "~/lib/db/schema";
+import { useMapStore } from "~/stores/map";
 
 const { handleSubmit, errors, meta, setErrors } = useForm({
     validationSchema: toTypedSchema(InsertLocation),
@@ -13,6 +15,8 @@ const router = useRouter();
 const loading = ref(false);
 const submitError = ref("");
 const submitted = ref(false);
+
+const mapStore = useMapStore();
 
 const onSubmit = handleSubmit(async (values) => {
     try {
@@ -51,8 +55,18 @@ onBeforeRouteLeave(() => {
     if (!confirmed) {
         return false;
     }
-
+    mapStore.addedPoint = null;
     return true;
+});
+
+onMounted(() => {
+    mapStore.addedPoint = {
+        long: (CENTER_ODESA as [number, number])[0],
+        lat: (CENTER_ODESA as [number, number])[1],
+        description: "",
+        name: "Added point",
+        id: 1,
+    };
 });
 </script>
 

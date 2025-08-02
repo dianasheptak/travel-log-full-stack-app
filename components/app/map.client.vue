@@ -17,6 +17,25 @@ const zoom = 11;
     >
         <MglNavigationControl />
         <MglMarker
+            v-if="mapStore.addedPoint"
+            :coordinates="CENTER_ODESA"
+            draggable
+        >
+            <template #marker>
+                <div
+                    class="tooltip tooltip-top hover:cursor-pointer"
+                    data-tip="Drag to your desired location"
+                >
+                    <Icon
+                        name="tabler:map-pin-filled"
+                        size="36"
+                        class="text-warning"
+                    />
+                </div>
+            </template>
+        </MglMarker>
+
+        <MglMarker
             v-for="point in mapStore.mapPoints"
             :key="point.id"
             :coordinates="[point.long, point.lat]"
