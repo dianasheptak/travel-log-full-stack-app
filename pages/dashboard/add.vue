@@ -8,6 +8,12 @@ import { useMapStore } from "~/stores/map";
 
 const { handleSubmit, errors, meta, setErrors, setFieldValue, controlledValues } = useForm({
     validationSchema: toTypedSchema(InsertLocation),
+    initialValues: {
+        name: "",
+        description: "",
+        long: (CENTER_ODESA as [number, number])[0],
+        lat: (CENTER_ODESA as [number, number])[1],
+    },
 });
 
 const { $csrfFetch } = useNuxtApp();
@@ -133,7 +139,7 @@ function formatNumber(value?: number) {
                     name="tabler:map-pin-filled"
                     size="24"
                     class="text-warning"
-                /> marker to your desired location.
+                /> marker to your desired location. <br> Or doubleclick on the map.
             </p>
 
             <p class="text-xs text-gray-400">

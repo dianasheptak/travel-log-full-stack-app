@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { MglEvent } from "@indoorequal/vue-maplibre-gl";
 import type { LngLat } from "maplibre-gl";
 
 import { CENTER_ODESA } from "~/lib/constants";
@@ -16,6 +17,14 @@ function updateAddedPoint(location: LngLat) {
         mapStore.addedPoint.lat = location.lat;
     }
 }
+
+function onDoubleClick(mglEvent: MglEvent<"dblclick">) {
+    console.log(mglEvent);
+    if (mapStore.addedPoint) {
+        mapStore.addedPoint.lat = mglEvent.event.lngLat.lat;
+        mapStore.addedPoint.long = mglEvent.event.lngLat.lng;
+    }
+}
 </script>
 
 <template>
@@ -23,17 +32,18 @@ function updateAddedPoint(location: LngLat) {
         :map-style="style"
         :center="CENTER_ODESA"
         :zoom="zoom"
+        @map:dblclick="onDoubleClick"
     >
         <MglNavigationControl />
         <MglMarker
             v-if="mapStore.addedPoint"
-            :coordinates="CENTER_ODESA"
+            :coordinates="[mapStore.addedPoint.long, mapStore.addedPoint.lat]"
             draggable
             @update:coordinates="updateAddedPoint"
         >
             <template #marker>
                 <div
-                    class="tooltip tooltip-top hover:cursor-pointer"
+                    class="tooltip tooltip-top tooltip-open hover:cursor-pointer"
                     data-tip="Drag to your desired location"
                 >
                     <Icon
@@ -55,8 +65,8 @@ function updateAddedPoint(location: LngLat) {
                     class="tooltip tooltip-top hover:cursor-pointer"
                     :data-tip="point.name"
                     :class="{ 'tooltip-open': mapStore.selectedPoint === point }"
-                    @mouseenter="mapStore.selectPointWithoutFlyTo(point)"
-                    @mouseleave="mapStore.selectPointWithoutFlyTo(null)"
+                    @mouseenter="mapStore.selectedPoint = point"
+                    @mouseleave="mapStore.selectedPoint = null"
                 >
                     <Icon
                         name="tabler:map-pin-filled"
