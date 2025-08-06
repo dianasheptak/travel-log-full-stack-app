@@ -2,6 +2,7 @@
 import type { FetchError } from "ofetch";
 
 import AppFormField from "~/components/app/form-field.vue";
+import AppPlaceSearch from "~/components/app/place-search.vue";
 import { CENTER_ODESA } from "~/lib/constants";
 import { InsertLocation } from "~/lib/db/schema";
 import { useMapStore } from "~/stores/map";
@@ -172,5 +173,7 @@ function formatNumber(value?: number) {
                 </button>
             </div>
         </form>
+        <div class="divider" />
+        <AppPlaceSearch />
     </div>
 </template>
