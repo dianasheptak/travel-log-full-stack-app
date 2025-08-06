@@ -103,14 +103,14 @@ function setLocation(result: NominatimResult) {
         <div v-if="loading" class="flex justify-center">
             <div class="loading loading-lg" />
         </div>
-        <div class="flex flex-col overflow-auto gap-2 max-h-60 mt-2">
+        <div class="flex flex-col overflow-auto gap-4 max-h-48 mt-2">
             <div
                 v-for="result in searchResults"
                 :key="result.place_id"
                 class="card card-sm bg-base-100"
             >
-                <div class="card-body">
-                    <h4 class="card-title">
+                <div class="card-body rounded-md border border-amber-200">
+                    <h4 class="card-title text-sm">
                         {{ result.display_name }}
                     </h4>
                     <div class="justify-end card-actions">
