@@ -39,6 +39,7 @@ function onDoubleClick(mglEvent: MglEvent<"dblclick">) {
             v-if="mapStore.addedPoint"
             :coordinates="[mapStore.addedPoint.long, mapStore.addedPoint.lat]"
             draggable
+            class-name="z-50"
             @update:coordinates="updateAddedPoint"
         >
             <template #marker>

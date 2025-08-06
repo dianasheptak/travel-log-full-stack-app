@@ -1,6 +1,6 @@
 import { useMap } from "@indoorequal/vue-maplibre-gl";
 import { LngLatBounds } from "maplibre-gl";
-import { watch } from "vue";
+import { nextTick, watch } from "vue";
 
 import type { MapPoint } from "~/lib/types";
 
@@ -8,7 +8,7 @@ export const useMapStore = defineStore("useMapStore", () => {
     const mapPoints = ref<MapPoint[]>([]);
 
     const selectedPoint = ref<MapPoint | null>(null);
-    const addedPoint = ref<MapPoint | null>(null);
+    const addedPoint = ref<MapPoint & { centerMap?: boolean } | null>(null);
     const map = useMap();
     let bounds: LngLatBounds | null = null;
 
@@ -29,13 +29,26 @@ export const useMapStore = defineStore("useMapStore", () => {
         });
     });
 
-    watch(addedPoint, (newValue, oldValue) => {
-        if (newValue && !oldValue) {
-            map.map?.flyTo({
-                center: [newValue.long, newValue.lat],
-                speed: 0.8,
-                zoom: 6,
-            });
+    watch(addedPoint, async (newValue, oldValue) => {
+        if ((newValue && !oldValue) || newValue?.centerMap) {
+            await nextTick();
+
+            if (map.map && map.map.isStyleLoaded()) {
+                map.map.flyTo({
+                    center: [newValue.long, newValue.lat],
+                    speed: 0.8,
+                    zoom: 5,
+                });
+            }
+            else {
+                map.map?.once("load", () => {
+                    map.map?.flyTo({
+                        center: [newValue.long, newValue.lat],
+                        speed: 0.8,
+                        zoom: 2,
+                    });
+                });
+            }
         }
     }, {
         immediate: true,

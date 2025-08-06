@@ -4,6 +4,7 @@ import type { FetchError } from "ofetch";
 import type { NominatimResult } from "~/lib/types";
 
 import { SearchSchema } from "~/lib/zod-schemas";
+import getFetchErrorMessage from "~/utils/get-fetch-error-message";
 
 const emit = defineEmits<{
     resultSelected: [result: NominatimResult];
@@ -29,7 +30,7 @@ async function onSubmit(query: Record<string, string>) {
     }
     catch (e) {
         const error = e as FetchError;
-        console.log(error);
+        errorMessage.value = getFetchErrorMessage(error);
     }
     loading.value = false;
 }

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { FetchError } from "ofetch";
 
+import type { NominatimResult } from "~/lib/types";
+
 import AppFormField from "~/components/app/form-field.vue";
 import AppPlaceSearch from "~/components/app/place-search.vue";
 import { CENTER_ODESA } from "~/lib/constants";
 import { InsertLocation } from "~/lib/db/schema";
 import { useMapStore } from "~/stores/map";
+import getFetchErrorMessage from "~/utils/get-fetch-error-message";
 
 const { handleSubmit, errors, meta, setErrors, setFieldValue, controlledValues } = useForm({
     validationSchema: toTypedSchema(InsertLocation),
@@ -44,7 +47,7 @@ const onSubmit = handleSubmit(async (values) => {
         if (error.data) {
             setErrors(error.data);
         }
-        submitError.value = error.data?.statusMessage || error.statusMessage || "An unknown error occured.";
+        submitError.value = getFetchErrorMessage(error);
     }
     finally {
         loading.value = false;
@@ -88,6 +91,18 @@ function formatNumber(value?: number) {
         return 0;
     }
     return value.toFixed(4);
+}
+
+function searchResultSelected(result: NominatimResult) {
+    setFieldValue("name", result.display_name);
+    mapStore.addedPoint = {
+        long: +result.lon,
+        lat: +result.lat,
+        description: "",
+        name: "Added point",
+        id: 1,
+        centerMap: true,
+    };
 }
 </script>
 
@@ -135,17 +150,21 @@ function formatNumber(value?: number) {
                 :error="errors.description"
             />
 
-            <p>
-                Drag the <Icon
-                    name="tabler:map-pin-filled"
-                    size="24"
-                    class="text-warning"
-                /> marker to your desired location. <br> Or doubleclick on the map.
+            <p class="text-xs text-gray-400">
+                Current coordinates: {{ formatNumber(controlledValues.lat) }}, {{ formatNumber(controlledValues.long) }}
             </p>
 
-            <p class="text-xs text-gray-400">
-                Current location: {{ formatNumber(controlledValues.lat) }}, {{ formatNumber(controlledValues.long) }}
-            </p>
+            <ul class="list-disc ml-4 text-sm">
+                <li>
+                    Drag the <Icon name="tabler:map-pin-filled" class="text-primary dark:text-warning" /> marker on the map.
+                </li>
+                <li>
+                    Double click the map.
+                </li>
+                <li>
+                    Search for a location below.
+                </li>
+            </ul>
 
             <div class="flex justify-end gap-2">
                 <button
@@ -174,6 +193,6 @@ function formatNumber(value?: number) {
             </div>
         </form>
         <div class="divider" />
-        <AppPlaceSearch />
+        <AppPlaceSearch @result-selected="searchResultSelected" />
     </div>
 </template>
