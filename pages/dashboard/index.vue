@@ -31,7 +31,7 @@ onMounted(() => {
                     'border-transparent': !isPointSelected(location, mapStore.selectedPoint),
                 }"
                 class="card card-compact bg-base-300 border h-40 w-72 mb-4 shrink-0 cursor-pointer"
-                @mouseenter="createMapPointFromLocation(location)"
+                @mouseenter="mapStore.selectedPoint = createMapPointFromLocation(location)"
                 @mouseleave="mapStore.selectedPoint = null"
             >
                 <div class="card-body">
