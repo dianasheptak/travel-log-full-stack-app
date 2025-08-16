@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useLocationsStore } from "~/stores/locations";
 import { useMapStore } from "~/stores/map";
+import { createMapPointFromLocation, isPointSelected } from "~/utils/map-points";
 
 const mapStore = useMapStore();
 const locationsStore = useLocationsStore();
@@ -26,11 +27,11 @@ onMounted(() => {
                 :key="location.id"
                 :to="{ name: 'dashboard-location-slug', params: { slug: location.slug } }"
                 :class="{
-                    'border-accent': location === mapStore.selectedPoint,
-                    'border-transparent': location !== mapStore.selectedPoint,
+                    'border-accent': isPointSelected(location, mapStore.selectedPoint),
+                    'border-transparent': !isPointSelected(location, mapStore.selectedPoint),
                 }"
                 class="card card-compact bg-base-300 border h-40 w-72 mb-4 shrink-0 cursor-pointer"
-                @mouseenter="mapStore.selectedPoint = location"
+                @mouseenter="createMapPointFromLocation(location)"
                 @mouseleave="mapStore.selectedPoint = null"
             >
                 <div class="card-body">

@@ -4,6 +4,7 @@ import SidebarButton from "~/components/sidebar-button.vue";
 import { useLocationsStore } from "~/stores/locations";
 import { useMapStore } from "~/stores/map";
 import { useSidebarStore } from "~/stores/sidebar";
+import { isPointSelected } from "~/utils/map-points";
 
 const isSidebarOpen = ref(true);
 const sidebarStore = useSidebarStore();
@@ -72,8 +73,8 @@ onMounted(() => {
                         :title="item.title"
                         :icon="item.icon"
                         :to="item.to"
-                        :icon-color="mapStore.selectedPoint === item.location ? 'text-primary' : undefined"
-                        @mouseenter="mapStore.selectedPoint = item.location ?? null"
+                        :icon-color="isPointSelected(item.mapPoint, mapStore.selectedPoint) ? 'text-primary' : undefined"
+                        @mouseenter="mapStore.selectedPoint = item.mapPoint ?? null"
                         @mouseleave="mapStore.selectedPoint = null"
                     />
                 </div>

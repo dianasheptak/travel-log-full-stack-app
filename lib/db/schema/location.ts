@@ -39,3 +39,4 @@ export const locationRelations = relations(location, ({ many }) => ({
 }));
 
 export type InsertLocation = z.infer<typeof InsertLocation>;
+export type SelectLocation = typeof location.$inferSelect;

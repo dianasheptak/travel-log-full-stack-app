@@ -7,7 +7,7 @@ export type SidebarItem = {
     title: string;
     icon: string;
     href?: string;
-    location?: MapPoint | null;
+    mapPoint?: MapPoint | null;
     to?: RouteLocationRaw;
 };
 
