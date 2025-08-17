@@ -20,12 +20,15 @@ function updateAddedPoint(location: LngLat) {
 }
 
 function onDoubleClick(mglEvent: MglEvent<"dblclick">) {
-    console.log(mglEvent);
     if (mapStore.addedPoint) {
         mapStore.addedPoint.lat = mglEvent.event.lngLat.lat;
         mapStore.addedPoint.long = mglEvent.event.lngLat.lng;
     }
 }
+
+onMounted(() => {
+    mapStore.init();
+});
 </script>
 
 <template>

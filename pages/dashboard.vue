@@ -24,6 +24,39 @@ onMounted(() => {
     if (route.path !== "/dashboard") {
         locationsStore.refresh();
     }
+
+    if (route.name === "dashboard") {
+        sidebarStore.sidebarTopItems = [
+            {
+                id: "link-dashboard",
+                title: "Locations",
+                href: "/dashboard",
+                icon: "tabler:map",
+            },
+            {
+                id: "link-location-add",
+                title: "Add Location",
+                href: "/dashboard/add",
+                icon: "tabler:circle-plus-filled",
+            },
+        ];
+    }
+    else if (route.name === "dashboard-location-slug") {
+        sidebarStore.sidebarTopItems = [
+            {
+                id: "link-dashboard",
+                title: "View Logs",
+                href: "/dashboard",
+                icon: "tabler:map",
+            },
+            {
+                id: "link-location-add",
+                title: "Add Location Log",
+                href: "/dashboard/add",
+                icon: "tabler:circle-plus-filled",
+            },
+        ];
+    }
 });
 </script>
 
@@ -48,15 +81,12 @@ onMounted(() => {
             </div>
             <div class="flex flex-col gap-3">
                 <SidebarButton
-                    icon="tabler:map"
-                    title="Locations"
-                    href="/dashboard"
-                    :show-label="isSidebarOpen"
-                />
-                <SidebarButton
-                    icon="tabler:circle-plus-filled"
-                    title="Add Location"
-                    href="/dashboard/add"
+                    v-for="item in sidebarStore.sidebarTopItems"
+                    :key="item.id"
+                    :icon="item.icon"
+                    :title="item.title"
+                    :href="item.href"
+                    :to="item.to"
                     :show-label="isSidebarOpen"
                 />
 
