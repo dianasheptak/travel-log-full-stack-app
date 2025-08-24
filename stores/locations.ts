@@ -6,9 +6,11 @@ import { createMapPointFromLocation } from "~/utils/map-points";
 import { useMapStore } from "./map";
 import { useSidebarStore } from "./sidebar";
 
-export const useLocationsStore = defineStore("useLocationsStore", () => {
-    const route = useRoute();
+const route = useRoute();
+const listLocationsInSidebar = new Set(["dashboard", "dashboard-add"]);
+const listCurrentLocationInSidebar = new Set(["dashboard-location-slug", "dashboard-location-slug-add", "dashboard-location-slug-edit"]);
 
+export const useLocationsStore = defineStore("useLocationsStore", () => {
     const { data: locations, status: locationsStatus, refresh: refreshLocations } = useFetch("/api/locations", {
         lazy: true,
     });
@@ -30,10 +32,10 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
     const mapStore = useMapStore();
 
     effect(() => {
-        const mapPoints: MapPoint[] = [];
-        const sidebarItems: SidebarItem[] = [];
+        if (locations.value && listLocationsInSidebar.has(route.name?.toString() || "")) {
+            const mapPoints: MapPoint[] = [];
+            const sidebarItems: SidebarItem[] = [];
 
-        if (locations.value) {
             locations.value.forEach((location) => {
                 const mapPoint = createMapPointFromLocation(location);
                 sidebarItems.push({
@@ -48,6 +50,10 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
             sidebarStore.loading = false;
             sidebarStore.sidebarItems = sidebarItems;
             mapStore.mapPoints = mapPoints;
+        }
+        else if (currentLocation.value && listCurrentLocationInSidebar.has(route.name?.toString() || "")) {
+            sidebarStore.sidebarItems = [];
+            mapStore.mapPoints = [currentLocation.value];
         }
         sidebarStore.loading = locationsStatus.value === "pending";
     });

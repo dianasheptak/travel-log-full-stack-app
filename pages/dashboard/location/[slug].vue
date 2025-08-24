@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { useLocationsStore } from "~/stores/locations";
-import { useMapStore } from "~/stores/map";
-
-const mapStore = useMapStore();
 
 const locationStore = useLocationsStore();
 
@@ -10,12 +7,6 @@ const { currentLocation: location, currentLocationError: error, currentLocationS
 
 onMounted(() => {
     locationStore.refreshCurrentLocation();
-});
-
-effect(() => {
-    if (location.value) {
-        mapStore.mapPoints = [location.value];
-    }
 });
 </script>
 
