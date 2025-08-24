@@ -11,6 +11,7 @@ const sidebarStore = useSidebarStore();
 const locationsStore = useLocationsStore();
 const mapStore = useMapStore();
 
+const { currentLocation } = storeToRefs(locationsStore);
 const route = useRoute();
 
 function toggleSidebar() {
@@ -19,12 +20,13 @@ function toggleSidebar() {
 }
 
 onMounted(() => {
-    isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
-
     if (route.path !== "/dashboard") {
-        locationsStore.refresh();
+        locationsStore.refreshLocations();
     }
+    isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
+});
 
+effect(() => {
     if (route.name === "dashboard") {
         sidebarStore.sidebarTopItems = [
             {
@@ -45,14 +47,41 @@ onMounted(() => {
         sidebarStore.sidebarTopItems = [
             {
                 id: "link-dashboard",
-                title: "View Logs",
+                title: "Back to Locations",
                 href: "/dashboard",
+                icon: "tabler:arrow-left",
+            },
+            {
+                id: "link-dashboard",
+                title: currentLocation.value ? currentLocation.value.name : "View Logs",
+                to: {
+                    name: "dashboard-location-slug",
+                    params: {
+                        slug: currentLocation.value?.slug,
+                    },
+                },
                 icon: "tabler:map",
+            },
+            {
+                id: "link-dashboard-edit",
+                title: "Edit Location",
+                to: {
+                    name: "dashboard-location-slug-edit",
+                    params: {
+                        slug: currentLocation.value?.slug,
+                    },
+                },
+                icon: "tabler:map-pin-cog",
             },
             {
                 id: "link-location-add",
                 title: "Add Location Log",
-                href: "/dashboard/add",
+                to: {
+                    name: "dashboard-location-slug-add",
+                    params: {
+                        slug: currentLocation.value?.slug,
+                    },
+                },
                 icon: "tabler:circle-plus-filled",
             },
         ];

@@ -1,3 +1,4 @@
+import type { SelectLocationWithLogs } from "~/lib/db/schema";
 import type { MapPoint } from "~/lib/types";
 
 import { createMapPointFromLocation } from "~/utils/map-points";
@@ -6,8 +7,23 @@ import { useMapStore } from "./map";
 import { useSidebarStore } from "./sidebar";
 
 export const useLocationsStore = defineStore("useLocationsStore", () => {
-    const { data, status, refresh } = useFetch("/api/locations", {
+    const route = useRoute();
+
+    const { data: locations, status: locationsStatus, refresh: refreshLocations } = useFetch("/api/locations", {
         lazy: true,
+    });
+
+    const locationUrlWithSlug = computed(() => `/api/locations/${route.params.slug}`);
+
+    const {
+        data: currentLocation,
+        status: currentLocationStatus,
+        error: currentLocationError,
+        refresh: refreshCurrentLocation,
+    } = useFetch<SelectLocationWithLogs>(locationUrlWithSlug, {
+        lazy: true,
+        immediate: false,
+        watch: false,
     });
 
     const sidebarStore = useSidebarStore();
@@ -17,8 +33,8 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
         const mapPoints: MapPoint[] = [];
         const sidebarItems: SidebarItem[] = [];
 
-        if (data.value) {
-            data.value.forEach((location) => {
+        if (locations.value) {
+            locations.value.forEach((location) => {
                 const mapPoint = createMapPointFromLocation(location);
                 sidebarItems.push({
                     id: `location-${location.id}`,
@@ -33,12 +49,16 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
             sidebarStore.sidebarItems = sidebarItems;
             mapStore.mapPoints = mapPoints;
         }
-        sidebarStore.loading = status.value === "pending";
+        sidebarStore.loading = locationsStatus.value === "pending";
     });
 
     return {
-        locations: data,
-        status,
-        refresh,
+        locations,
+        locationsStatus,
+        refreshLocations,
+        currentLocation,
+        currentLocationStatus,
+        currentLocationError,
+        refreshCurrentLocation,
     };
 });

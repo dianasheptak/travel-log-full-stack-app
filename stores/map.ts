@@ -41,7 +41,7 @@ export const useMapStore = defineStore("useMapStore", () => {
                 await nextTick();
 
                 if (map.map && map.map.isStyleLoaded()) {
-                    map.map.flyTo({
+                    map.map?.flyTo({
                         center: [newValue.long, newValue.lat],
                         speed: 0.8,
                         zoom: 5,
