@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppMap from "~/components/app/map.client.vue";
 import SidebarButton from "~/components/sidebar-button.vue";
+import { CURRENT_LOCATION_PAGES, LOCATION_PAGES } from "~/lib/constants";
 import { useLocationsStore } from "~/stores/locations";
 import { useMapStore } from "~/stores/map";
 import { useSidebarStore } from "~/stores/sidebar";
@@ -11,7 +12,7 @@ const sidebarStore = useSidebarStore();
 const locationsStore = useLocationsStore();
 const mapStore = useMapStore();
 
-const { currentLocation } = storeToRefs(locationsStore);
+const { currentLocation, currentLocationStatus } = storeToRefs(locationsStore);
 const route = useRoute();
 
 function toggleSidebar() {
@@ -27,64 +28,60 @@ onMounted(() => {
 });
 
 effect(() => {
-    if (route.name === "dashboard") {
-        sidebarStore.sidebarTopItems = [
-            {
-                id: "link-dashboard",
-                title: "Locations",
-                href: "/dashboard",
-                icon: "tabler:map",
-            },
-            {
-                id: "link-location-add",
-                title: "Add Location",
-                href: "/dashboard/add",
-                icon: "tabler:circle-plus-filled",
-            },
-        ];
+    if (LOCATION_PAGES.has(route.name?.toString() || "")) {
+        sidebarStore.sidebarTopItems = [{
+            id: "link-dashboard",
+            title: "Locations",
+            href: "/dashboard",
+            icon: "tabler:map",
+        }, {
+            id: "link-location-add",
+            title: "Add Location",
+            href: "/dashboard/add",
+            icon: "tabler:circle-plus-filled",
+        }];
     }
-    else if (route.name === "dashboard-location-slug") {
-        sidebarStore.sidebarTopItems = [
-            {
+    else if (CURRENT_LOCATION_PAGES.has(route.name?.toString() || "")) {
+        sidebarStore.sidebarTopItems = [{
+            id: "link-dashboard",
+            title: "Back to Locations",
+            href: "/dashboard",
+            icon: "tabler:arrow-left",
+        }];
+
+        if (currentLocation.value && currentLocationStatus.value !== "pending") {
+            sidebarStore.sidebarTopItems.push({
                 id: "link-dashboard",
-                title: "Back to Locations",
-                href: "/dashboard",
-                icon: "tabler:arrow-left",
-            },
-            {
-                id: "link-dashboard",
-                title: currentLocation.value ? currentLocation.value.name : "View Logs",
+                title: currentLocation.value.name,
                 to: {
                     name: "dashboard-location-slug",
                     params: {
-                        slug: currentLocation.value?.slug,
+                        slug: route.params.slug,
                     },
                 },
                 icon: "tabler:map",
-            },
-            {
-                id: "link-dashboard-edit",
+            }, {
+                id: "link-location-edit",
                 title: "Edit Location",
                 to: {
                     name: "dashboard-location-slug-edit",
                     params: {
-                        slug: currentLocation.value?.slug,
+                        slug: route.params.slug,
                     },
                 },
                 icon: "tabler:map-pin-cog",
-            },
-            {
+            }, {
                 id: "link-location-add",
                 title: "Add Location Log",
                 to: {
                     name: "dashboard-location-slug-add",
                     params: {
-                        slug: currentLocation.value?.slug,
+                        slug: route.params.slug,
                     },
                 },
                 icon: "tabler:circle-plus-filled",
-            },
-        ];
+            });
+        }
     }
 });
 </script>
