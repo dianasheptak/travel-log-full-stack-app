@@ -37,11 +37,8 @@ export default defineNuxtConfig({
         dataValue: "theme",
     },
     routeRules: {
-        "/dashboard": {
-            ssr: false,
-        },
-        "/dashboard/add": {
-            ssr: false,
-        },
+        "/dashboard": { ssr: false },
+        "/dashboard/add": { ssr: false },
+        "/dashboard/location/**": { ssr: false },
     },
 });
