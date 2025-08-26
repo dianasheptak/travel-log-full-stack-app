@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppMap from "~/components/app/map.client.vue";
 import SidebarButton from "~/components/sidebar-button.vue";
-import { CURRENT_LOCATION_PAGES, LOCATION_PAGES } from "~/lib/constants";
+import { CURRENT_LOCATION_PAGES, EDIT_PAGES, LOCATION_PAGES } from "~/lib/constants";
 import { useLocationsStore } from "~/stores/locations";
 import { useMapStore } from "~/stores/map";
 import { useSidebarStore } from "~/stores/sidebar";
@@ -144,9 +144,19 @@ effect(() => {
             </div>
         </div>
 
-        <div class="flex-1 overflow-auto bg-base-100">
-            <div class="flex size-full" :class="{ 'flex-col': route.path !== '/dashboard/add' }">
-                <NuxtPage />
+        <div class="flex-1 overflow-auto bg-base-200">
+            <div
+                class="flex size-full"
+                :class="{
+                    'flex-col': !EDIT_PAGES.has(route.name?.toString() || ''),
+                }"
+            >
+                <NuxtPage
+                    :class="{
+                        'shrink-0': EDIT_PAGES.has(route.name?.toString() || ''),
+                        'w-96': EDIT_PAGES.has(route.name?.toString() || ''),
+                    }"
+                />
                 <AppMap class="flex-1" />
             </div>
         </div>

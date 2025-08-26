@@ -12,15 +12,16 @@ const props = defineProps<{
     loading: boolean;
     submitted: boolean;
     submitErrors: Record<string, string>;
+    initialValues?: InsertLocation | null;
 }>();
 
 const { handleSubmit, errors, meta, setErrors, setFieldValue, controlledValues } = useForm({
     validationSchema: toTypedSchema(InsertLocation),
     initialValues: {
-        name: "",
-        description: "",
-        long: (CENTER_ODESA as [number, number])[0],
-        lat: (CENTER_ODESA as [number, number])[1],
+        name: props.initialValues?.name || "",
+        description: props.initialValues?.description || "",
+        long: props.initialValues?.long || (CENTER_ODESA as [number, number])[0],
+        lat: props.initialValues?.lat || (CENTER_ODESA as [number, number])[1],
     },
 });
 
@@ -52,8 +53,8 @@ function searchResultSelected(result: NominatimResult) {
 
 onMounted(() => {
     mapStore.addedPoint = {
-        long: (CENTER_ODESA as [number, number])[0],
-        lat: (CENTER_ODESA as [number, number])[1],
+        long: props.initialValues?.long || (CENTER_ODESA as [number, number])[0],
+        lat: props.initialValues?.lat || (CENTER_ODESA as [number, number])[1],
         description: "",
         name: "Added point",
         id: 1,
