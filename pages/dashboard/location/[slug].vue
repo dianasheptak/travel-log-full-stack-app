@@ -1,14 +1,20 @@
-<script setup lang="ts">
-import { useLocationsStore } from "~/stores/locations";
-
-const locationStore = useLocationsStore();
-
-const { currentLocation: location, currentLocationError: error, currentLocationStatus: status } = storeToRefs(locationStore);
-
+<script lang="ts" setup>
 const route = useRoute();
+const locationStore = useLocationsStore();
+const {
+    currentLocation: location,
+    currentLocationError: error,
+    currentLocationStatus: status,
+} = storeToRefs(locationStore);
 
 onMounted(() => {
     locationStore.refreshCurrentLocation();
+});
+
+onBeforeRouteUpdate((to) => {
+    if (to.name === "dashboard-location-slug") {
+        locationStore.refreshCurrentLocation();
+    }
 });
 </script>
 
