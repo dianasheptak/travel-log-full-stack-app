@@ -15,15 +15,20 @@ const mapStore = useMapStore();
 const { currentLocation, currentLocationStatus } = storeToRefs(locationsStore);
 const route = useRoute();
 
+if (LOCATION_PAGES.has(route.name?.toString() || "")) {
+    await locationsStore.refreshLocations();
+}
+
+if (CURRENT_LOCATION_PAGES.has(route.name?.toString() || "")) {
+    await locationsStore.refreshCurrentLocation();
+}
+
 function toggleSidebar() {
     isSidebarOpen.value = !isSidebarOpen.value;
     localStorage.setItem("isSidebarOpen", isSidebarOpen.value.toString());
 }
 
 onMounted(() => {
-    if (route.path !== "/dashboard") {
-        locationsStore.refreshLocations();
-    }
     isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
 });
 

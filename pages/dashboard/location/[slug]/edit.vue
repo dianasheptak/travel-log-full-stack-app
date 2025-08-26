@@ -1,52 +1,39 @@
 <script setup lang="ts">
-import type { FetchError } from "ofetch";
+import type { InsertLocation } from "~/lib/db/schema";
 
 import LocationForm from "~/components/location-form.vue";
 import { useLocationsStore } from "~/stores/locations";
-import getFetchErrorMessage from "~/utils/get-fetch-error-message";
 
 const locationStore = useLocationsStore();
 const { $csrfFetch } = useNuxtApp();
-const loading = ref(false);
-const submitError = ref("");
-const submitErrors = ref({});
-const submitted = ref(false);
 
-async function onSubmit(values) {
-    try {
-        submitError.value = "";
-        submitErrors.value = {};
-        loading.value = true;
-        const inserted = await $csrfFetch("/api/locations", {
-            method: "post",
-            body: values,
-        });
+const route = useRoute();
 
-        console.log(inserted);
+async function onSubmit(values: InsertLocation) {
+    await $csrfFetch(`/api/locations/${route.params.slug}`, {
+        method: "put",
+        body: values,
+    });
+}
 
-        submitted.value = true;
-        navigateTo("/dashboard");
-    }
-    catch (e) {
-        const error = e as FetchError;
-        if (error.data) {
-            submitErrors.value = error.data?.data;
-        }
-        submitError.value = getFetchErrorMessage(error);
-    }
-    finally {
-        loading.value = false;
-    }
-};
+function onSubmitComplete() {
+    navigateTo({
+        name: "dashboard-location-slug",
+        params: {
+            slug: route.params.slug,
+        },
+    });
+}
 </script>
 
 <template>
     <LocationForm
-        :submitted="submitted"
-        :loading="loading"
+        v-if="locationStore.currentLocationStatus !== 'pending'"
         :on-submit="onSubmit"
-        :submit-errors="submitErrors"
+        :on-submit-complete="onSubmitComplete"
         :initial-values="locationStore.currentLocation"
+        submit-label="Update"
+        submit-icon="tabler:map-pin-up"
     />
 </template>
 \
