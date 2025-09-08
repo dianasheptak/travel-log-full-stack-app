@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { FetchError } from "ofetch";
+
 const route = useRoute();
 const locationStore = useLocationsStore();
 const {
@@ -8,13 +10,33 @@ const {
 } = storeToRefs(locationStore);
 
 const isOpen = ref(false);
+const deleteError = ref("");
+const isDeleting = ref(false);
+
+const loading = computed(() => status.value === "pending" || isDeleting.value);
+const errorMessage = computed(() => error.value?.statusMessage || deleteError.value);
 
 function openDialog() {
     isOpen.value = true;
     (document.activeElement as HTMLElement).blur();
 }
 
-function confirmDeleteLocation() {}
+async function confirmDeleteLocation() {
+    try {
+        isOpen.value = false;
+        deleteError.value = "";
+        isDeleting.value = true;
+        await $fetch(`/api/locations/${route.params.slug}`, {
+            method: "DELETE",
+        });
+        navigateTo("/dashboard");
+    }
+    catch (e) {
+        const error = e as FetchError;
+        deleteError.value = getFetchErrorMessage(error);
+    }
+    isDeleting.value = false;
+}
 
 onMounted(() => {
     locationStore.refreshCurrentLocation();
@@ -29,12 +51,12 @@ onBeforeRouteUpdate((to) => {
 
 <template>
     <div class="p-4 min-h-64">
-        <div v-if="status === 'pending'">
+        <div v-if="loading">
             <div class="loading" />
         </div>
-        <div v-if="error && status !== 'pending'" class="alert alert-error">
+        <div v-if="errorMessage && !loading" class="alert alert-error">
             <h2 class="text-lg">
-                {{ error.statusMessage }}
+                {{ errorMessage }}
             </h2>
         </div>
         <div v-if="route.name === 'dashboard-location-slug' && location && status !== 'pending'">
