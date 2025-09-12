@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { InsertLocation } from "~/lib/db/schema";
 
-import LocationForm from "~/components/location-form.vue";
+import LocationBaseForm from "~/components/location-base-form.vue";
 
 const { $csrfFetch } = useNuxtApp();
 
@@ -27,7 +27,7 @@ function onSubmitComplete() {
                 A location is a place you have traveled or will travel to. It can be a city, country, state or point of interest. You can add specific times you visited this location after adding it.
             </p>
         </div>
-        <LocationForm
+        <LocationBaseForm
             :on-submit="onSubmit"
             :on-submit-complete="onSubmitComplete"
             submit-label="Add"

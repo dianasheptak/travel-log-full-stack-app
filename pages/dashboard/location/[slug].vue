@@ -97,10 +97,10 @@ onBeforeRouteUpdate((to) => {
                     Add a location log to get started.
                 </p>
             </div>
-            <button class="btn btn-primary mt-2">
+            <NuxtLink :to="{ name: 'dashboard-location-slug-add', params: { slug: route.params.slug } }" class="btn btn-primary mt-2">
                 Add Location Log
                 <Icon name="tabler:map-pin-plus" size="24" />
-            </button>
+            </NuxtLink>
         </div>
         <div v-if="route.name !== 'dashboard-location-slug'">
             <NuxtPage />

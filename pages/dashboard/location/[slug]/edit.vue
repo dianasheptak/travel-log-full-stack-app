@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { InsertLocation } from "~/lib/db/schema";
 
-import LocationForm from "~/components/location-form.vue";
+import LocationBaseForm from "~/components/location-base-form.vue";
 import { useLocationsStore } from "~/stores/locations";
 
 const locationStore = useLocationsStore();
@@ -27,7 +27,7 @@ function onSubmitComplete() {
 </script>
 
 <template>
-    <LocationForm
+    <LocationBaseForm
         v-if="locationStore.currentLocationStatus !== 'pending'"
         :on-submit="onSubmit"
         :on-submit-complete="onSubmitComplete"
